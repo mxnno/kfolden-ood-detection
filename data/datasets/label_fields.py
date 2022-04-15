@@ -34,5 +34,10 @@ def get_labels(data_sign, dist_sign="id"):
         if dist_sign == "id":
             return ["Health", "Science & Mathematics", "Sports", "Entertainment & Music", "Business & Finance"]
         return ["Society & Culture", "Education & Reference", "Computers & Internet", "Family & Relationships", "Politics & Government"]
+    elif data_sign == "clinc":
+        if dist_sign == "id":
+            return ['exchange_rate', 'car_rental', 'vaccines', 'international_visa', 'translate', 'carry_on', 'book_flight', 'timezone', 'flight_status', 'lost_luggage', 'book_hotel', 'plug_type', 'travel_alert', 'travel_notification', 'travel_suggestion']
+        return ['exchange_rate', 'car_rental', 'vaccines', 'international_visa', 'translate', 'carry_on', 'book_flight', 'timezone', 'flight_status', 'lost_luggage', 'book_hotel', 'plug_type', 'travel_alert', 'travel_notification', 'travel_suggestion']
+
 
     return [0, 1]
