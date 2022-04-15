@@ -1,6 +1,6 @@
 tensorboard
 tqdm
-pytorch-lightning
+pytorch-lightning==0.9.0
 transformers
 scikit-learn
 pyyaml
