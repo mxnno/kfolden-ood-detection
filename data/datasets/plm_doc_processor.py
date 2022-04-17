@@ -90,7 +90,12 @@ def convert_examples_to_features(data_sign, data_example_lst, tokenizer, max_len
     all_attention_mask = torch.tensor([f.attention_mask for f in features], dtype=torch.long)
     all_token_type_ids = torch.tensor([f.token_type_ids for f in features], dtype=torch.long)
     all_label = torch.tensor([f.label for f in features], dtype=torch.long)
-
+    print("###############################")
+    print(all_input_ids)
+    print(all_attention_mask)
+    print(all_token_type_ids)
+    print(all_label)
+    print("###############################")
     dataset = TensorDataset(all_input_ids, all_attention_mask, all_token_type_ids, all_label)
     return features, dataset, label_map
 
