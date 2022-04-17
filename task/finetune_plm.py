@@ -28,6 +28,7 @@ from transformers import AdamW, AutoTokenizer, get_linear_schedule_with_warmup
 import pytorch_lightning as pl
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
+from torchmetrics.classification import Accuracy
 
 from data.datasets.label_fields import get_labels
 from data.datasets.plm_doc_dataset import PLMDocDataset
@@ -73,7 +74,7 @@ class FinetunePLMTask(pl.LightningModule):
         self.result_logger = logging.getLogger(__name__)
         self.result_logger.setLevel(logging.INFO)
         self.result_logger.info(str(args.__dict__ if isinstance(args, argparse.ArgumentParser) else args))
-        self.metric_accuracy = pl.metrics.Accuracy(num_classes=self.num_classes)
+        self.metric_accuracy = Accuracy(num_classes=self.num_classes)
         self.num_gpus = 1
 
     @staticmethod
@@ -262,17 +263,30 @@ def find_best_checkpoint_on_dev(output_dir: str, path_prefix: str, log_file: str
 def finetune_model(args, save_output_dir, keep_label_lst):
 
     task_model = FinetunePLMTask(args, keep_label_lst=keep_label_lst, save_output_dir=save_output_dir)
+    print("Hi")
+    c = list(task_model.get_dataloader(prefix="train"))
+    print(len(c[0]))
+    print(c[0][0])
+    print(c[0][1])
+    print(c[0][2])
+    print(c[0][3])
+    print(c[0][4])
+    print(c[0][0].size())
+    print(c[0][1].size())
+    print(c[0][2].size())
+    print(c[0][3].size())
+    print(c[0][4].size())
+    print("bye")
     if len(args.pretrained_checkpoint) > 1:
         task_model.load_state_dict(torch.load(args.pretrained_checkpoint, map_location=torch.device("cpu"))["state_dict"])
 
     checkpoint_callback = ModelCheckpoint(
-        filepath=save_output_dir,
+        dirpath=save_output_dir,
         save_top_k=args.max_keep_ckpt,
         save_last=False,
         monitor="val_acc",
         verbose=True,
-        mode='max',
-        period=-1)
+        mode='max',)
 
     task_trainer = Trainer.from_argparse_args(args, checkpoint_callback=checkpoint_callback, deterministic=True)
     task_trainer.fit(task_model)

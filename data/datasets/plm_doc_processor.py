@@ -72,6 +72,10 @@ def convert_examples_to_features(data_sign, data_example_lst, tokenizer, max_len
         # title,content,best_answer,label
         batch_encoding = tokenizer([
             f"{example['data']}" for example in data_example_lst], max_length=max_length, padding="max_length", truncation=True)
+    elif data_sign == "clinc":
+        # title,content,best_answer,label
+        batch_encoding = tokenizer([
+            f"{example['data']}" for example in data_example_lst], max_length=max_length, padding="max_length", truncation=True)
     else:
         raise ValueError("ERROR : NOT Existing data signature... ...")
 

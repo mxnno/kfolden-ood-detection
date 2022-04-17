@@ -8,8 +8,7 @@
 
 import torch.nn as nn
 from torch import Tensor
-from transformers import BertModel, BertPreTrainedModel
-from transformers.modeling_roberta import RobertaModel, RobertaPreTrainedModel
+from transformers import BertModel, BertPreTrainedModel, RobertaModel, RobertaPreTrainedModel
 
 from models.classifier import truncated_normal_
 from models.model_config import BertForSequenceClassificationConfig, RobertaForSequenceClassificationConfig
