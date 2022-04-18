@@ -180,6 +180,7 @@ class FinetunePLMTask(pl.LightningModule):
         tensorboard_logs = {"val_loss": avg_loss}
         tensorboard_logs[f"acc"] = avg_acc
         self.result_logger.info(f"EVAL INFO -> current_epoch is: {self.trainer.current_epoch}, current_global_step is: {self.trainer.global_step} ")
+        print("ACC: " + str(avg_acc))
         return {"val_loss": avg_loss, "val_log": tensorboard_logs, "val_acc": avg_acc}
 
     def test_step(self, batch, batch_idx):
@@ -263,23 +264,12 @@ def find_best_checkpoint_on_dev(output_dir: str, path_prefix: str, log_file: str
 def finetune_model(args, save_output_dir, keep_label_lst):
 
     task_model = FinetunePLMTask(args, keep_label_lst=keep_label_lst, save_output_dir=save_output_dir)
-    print("Hi")
-    c = list(task_model.get_dataloader(prefix="train"))
-    print(len(c[0]))
-    print(c[0][0])
-    print(c[0][1])
-    print(c[0][2])
-    print(c[0][3])
-    print(c[0][4])
-    print(c[0][0].size())
-    print(c[0][1].size())
-    print(c[0][2].size())
-    print(c[0][3].size())
-    print(c[0][4].size())
-    print("bye")
+
     if len(args.pretrained_checkpoint) > 1:
         task_model.load_state_dict(torch.load(args.pretrained_checkpoint, map_location=torch.device("cpu"))["state_dict"])
-
+    
+    print("AAAAAAAAAAAAAAAAA")
+    print(save_output_dir)
     checkpoint_callback = ModelCheckpoint(
         dirpath=save_output_dir,
         save_top_k=args.max_keep_ckpt,
@@ -293,6 +283,11 @@ def finetune_model(args, save_output_dir, keep_label_lst):
 
     # after training, use the model checkpoint which achieves the best f1 score on dev set to compute the f1 on test set.
     best_acc_on_dev, path_to_best_checkpoint = find_best_checkpoint_on_dev(args.output_dir, save_output_dir+"/", only_keep_the_best_ckpt=args.only_keep_the_best_ckpt_after_training)
+    
+    #/content/kfolden-ood-detection/Outputs/lightning_logs/version_0/checkpoints/aaaa.ckpt
+    folder_best_checkpoint= os.path.join("/content/drive/MyDrive/Masterarbeit/OOD-Methoden/kFolden/Outputs/lightning_logs/", "version_" + save_output_dir[-1] + "/checkpoints/")
+    path_to_best_checkpoint = os.path.join(folder_best_checkpoint, os.listdir(folder_best_checkpoint)[0])
+
     task_model.result_logger.info("=&" * 20)
     task_model.result_logger.info(f"saved output dir is : {save_output_dir}")
     task_model.result_logger.info(f"Best ACC on DEV is {best_acc_on_dev}")
@@ -370,5 +365,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 

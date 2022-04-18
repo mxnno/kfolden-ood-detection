@@ -11,6 +11,7 @@ from data.datasets.collate_functions import collate_plm_to_max_length, collate_n
 
 
 def get_dataloader(input_arguments, tokenizer, mode, keep_label_lst, pretrian_model=True, dist_sign="id"):
+    print("get_dataloader")
     batch_size = input_arguments.eval_batch_size
     if pretrian_model:
         dataset = PLMDocDataset(input_arguments, tokenizer, distribution_type=dist_sign, mode=mode, keep_label_lst=keep_label_lst)

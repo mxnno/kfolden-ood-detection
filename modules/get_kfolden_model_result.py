@@ -26,6 +26,8 @@ def collect_kfolden_pred_logits(args, tokenizer, full_id_label_lst, save_eval_di
         file_saving_best_ckpt_path = os.path.join(sub_output_dir, "best_ckpt_on_dev.txt")
         with open(file_saving_best_ckpt_path, "r") as f:
             best_ckpt_on_dev = f.read().strip()
+            #best_ckpt_on_dev = "/content/kfolden-ood-detection" + best_ckpt_on_dev
+
 
         hparams_file = os.path.join(args.output_dir, "lightning_logs", f"version_{idx}", "hparams.yaml")
         model_ckpt = best_ckpt_on_dev
